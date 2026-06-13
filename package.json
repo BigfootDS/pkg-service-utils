@@ -1,0 +1,62 @@
+{
+  "name": "@bigfootds/bigfootds-service-utils",
+  "version": "0.1.0",
+  "description": "Reusable service-side utilities for BigfootDS microservices.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./requestIds": {
+      "types": "./dist/requestIds.d.ts",
+      "require": "./dist/requestIds.js",
+      "default": "./dist/requestIds.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "require": "./dist/errors.js",
+      "default": "./dist/errors.js"
+    },
+    "./serviceTokens": {
+      "types": "./dist/serviceTokens.d.ts",
+      "require": "./dist/serviceTokens.js",
+      "default": "./dist/serviceTokens.js"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "require": "./dist/express.js",
+      "default": "./dist/express.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "test": "npm run build && node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BigfootDS/pkg-service-utils.git"
+  },
+  "keywords": [],
+  "author": "Alex Stormwood <alex.stormwood@bigfootds.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BigfootDS/pkg-service-utils/issues"
+  },
+  "homepage": "https://github.com/BigfootDS/pkg-service-utils#readme",
+  "dependencies": {
+    "@bigfootds/bigfootds-shared-data": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "typescript": "^6.0.3"
+  }
+}

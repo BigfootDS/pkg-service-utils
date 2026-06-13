@@ -1,0 +1,49 @@
+name: Node CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test_and_bump:
+    runs-on: ubuntu-latest
+    outputs:
+      latestSHA: ${{ steps.committer.outputs.latestSHA }}
+    permissions:
+      contents: write
+    steps:
+      - name: Initialize repo
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Automated Version Bump
+        uses: phips28/gh-action-bump-version@v9.1.0
+
+      - name: Get new git commit SHA
+        id: committer
+        run: |
+          SHA=$(git rev-parse HEAD)
+          echo "$SHA"
+          echo "latestSHA=$SHA" >> "$GITHUB_OUTPUT"
+
+  call_cicd_workflow:
+    needs: test_and_bump
+    name: Call the CD workflow
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/cd.yml
+    with:
+      latestSHA: ${{ needs.test_and_bump.outputs.latestSHA }}

@@ -1,0 +1,37 @@
+name: CD
+
+on:
+  workflow_call:
+    inputs:
+      latestSHA:
+        required: true
+        type: string
+
+jobs:
+  publish_npm:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Initialize repo
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.latestSHA }}
+
+      - name: Prepare Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
+
+      - name: Prepare package
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Publish package
+        run: npm publish --access public --provenance
