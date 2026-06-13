@@ -1,6 +1,6 @@
 {
   "name": "@bigfootds/bigfootds-service-utils",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Reusable service-side utilities for BigfootDS microservices.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
