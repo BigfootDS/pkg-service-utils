@@ -4,14 +4,14 @@ Reusable service-side utilities for BigfootDS microservices.
 
 This package helps services apply the same request, error, and internal-caller conventions without copying helper code into each service. It is a package, not a service, and it does not own runtime data.
 
-## First-Pass Scope
+## To-Do List
 
-- request ID generation, validation, inbound resolution, active request metadata, and response-header wiring
-- standard JSON error helpers built from the global error catalogue in `@bigfootds/bigfootds-shared-data`
-- framework-neutral bearer service-token verification and service caller policy results
-- thin Express-style adapters for request IDs, service-token verification, and standard error responses
+- [x] Morgan logging helpers
+- [x] Profanity matching/normalisation helpers.
+- [ ] Broad validation helpers
+- [ ] Audit helpers
+- [ ] Admin/operator bulk helpers
 
-Deferred areas include broad validation helpers, audit helpers, Morgan logging helpers, admin/operator bulk helpers, and profanity matching/normalisation helpers.
 
 ## Public Package Safety
 
@@ -120,6 +120,48 @@ app.post(
 );
 
 app.use(standardErrorHandler());
+```
+
+## Morgan Logging
+
+Use the BigfootDS Morgan logger to emit one-line request logs similar to the current microservice convention, with request ID support added:
+
+```ts
+import {
+	createBigfootDSMorganLogger,
+	requestIdMiddleware
+} from "@bigfootds/bigfootds-service-utils";
+
+app.use(requestIdMiddleware());
+app.use(createBigfootDSMorganLogger());
+```
+
+Logging is disabled by default when `NODE_ENV` is `test`. The default format is exported as `BIGFOOTDS_MORGAN_FORMAT` if a service needs to pass it to Morgan directly.
+
+## Profanity And Restricted Words
+
+Runtime profanity handling lives here, while the static word lists and metadata stay in `@bigfootds/bigfootds-shared-data`.
+
+```ts
+import {
+	chatProfanityHandler,
+	playerNameProfanityHandler
+} from "@bigfootds/bigfootds-service-utils";
+
+const chatHasProfanity = chatProfanityHandler.exists("I like big butts and I cannot lie");
+const nameResult = playerNameProfanityHandler.check("BigfootDS_Admin");
+```
+
+Use the lower-level helpers when a service needs direct list matching or normalisation:
+
+```ts
+import {
+	findProfanityListMatches,
+	normalizeModerationText
+} from "@bigfootds/bigfootds-service-utils";
+
+const normalised = normalizeModerationText("  BigfootDS\tAdmin  ");
+const matches = findProfanityListMatches(normalised);
 ```
 
 ## Package Boundary

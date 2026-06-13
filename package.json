@@ -33,6 +33,16 @@
       "require": "./dist/express.js",
       "default": "./dist/express.js"
     },
+    "./logging": {
+      "types": "./dist/logging.d.ts",
+      "require": "./dist/logging.js",
+      "default": "./dist/logging.js"
+    },
+    "./profanity": {
+      "types": "./dist/profanity.d.ts",
+      "require": "./dist/profanity.js",
+      "default": "./dist/profanity.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -53,9 +63,12 @@
   },
   "homepage": "https://github.com/BigfootDS/pkg-service-utils#readme",
   "dependencies": {
-    "@bigfootds/bigfootds-shared-data": "^2.1.0"
+    "@2toad/profanity": "^3.3.0",
+    "@bigfootds/bigfootds-shared-data": "^3.0.0",
+    "morgan": "^1.11.0"
   },
   "devDependencies": {
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.9.2",
     "typescript": "^6.0.3"
   }
